@@ -6,6 +6,16 @@ and generates grounded answers using a modular LLM backend (local by default, AP
 
 
 
+
+
+
+<img width="800" height="454" alt="Screenshot 2026-01-05 164025" src="https://github.com/user-attachments/assets/315f5b3b-82da-41bc-b0aa-d64c1c00a192" />
+
+
+
+
+
+
 ## Architecture Diagram
 
 The LLM interface allows swapping between local and API-based models without changing retrieval logic.
