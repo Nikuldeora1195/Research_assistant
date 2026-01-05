@@ -90,6 +90,32 @@ Answer quality scales with the LLM backend, while retrieval correctness remains 
 
 
 
+## Folder structure
+
+
+  research_assistant/<br>
+  ├── data/<br>
+  │   └── papers/<br>
+  ├── src/<br>
+  │   ├── ingestion/<br>
+  │   │   └── pdfloader.py<br>
+  │   ├── retrieval/<br>
+  │   │   └── vector_store.py<br>
+  │   ├── llm/<br>
+  │   │   ├── base.py<br>
+  │   │   ├── local_llm.py<br>
+  │   │   └── llama_api.py<br>
+  │   └── rag_query.py<br>
+  ├── evaluation.md<br>
+  ├── requirements.txt<br>
+  ├── README.md<br>
+  ├── .gitignore<br>
+  └── venv/<br>
+
+
+
+
+
 
 ## Design Decisions
 
