@@ -42,6 +42,62 @@ The system follows a standard RAG pipeline:
 
 
 
+ ##     🐳 Dockerized Deployment
+
+This project is containerized using Docker to ensure reproducible execution and environment consistency, especially when working with ML libraries such as FAISS and Transformers.
+
+Docker is used only for packaging and deployment and does not affect the RAG pipeline logic, retrieval quality, or generation behavior.
+
+# Why Docker?
+
+Eliminates “works on my machine” issues
+
+Packages Python version, dependencies, and models together
+
+Enables one-command execution of the RAG pipeline
+
+Keeps retrieval and generation logic unchanged
+
+Build the Docker Image
+
+#            From the project root:
+
+             docker build -t rag-assistant .
+
+     # Run the Container
+docker run -it rag-assistant
+
+# Using Groq API (Optional)
+
+To enable the optional Groq API (LLaMA) backend, pass the API key as an environment variable:
+
+      docker run -it -e GROQ_API_KEY=your_key rag-assistant
+
+
+Local inference using FLAN-T5 remains the default and requires no API key.
+
+   #   Notes
+
+The FAISS index must be built before running the container:
+
+python src/retrieval/vector_store.py
+
+
+Docker is used for reproducibility, not orchestration
+
+No Docker Compose or Kubernetes is required for this project
+
+
+
+
+
+
+
+
+
+
+
+
 ## LLM Backends
 
 This project supports two interchangeable LLM backends:
@@ -114,14 +170,27 @@ Then set in src/rag_query.py:
 
 USE_API_LLM = True
 
+
+### Using Custom Documents
+
+To query a different document, replace the file located at:
+
+
+with your own PDF file and keep the same filename (`gen ai research.pdf`).
+
+The system will automatically ingest this document and build embeddings
+when the vector index is created.
+
+
+
+
+
+
 # Notes
 
 API usage is optional and disabled by default.
 
 Retrieval pipeline remains unchanged across LLM backends.
-
-
-
 
 
 Future improvements include benchmarking answer quality across different LLM backends.

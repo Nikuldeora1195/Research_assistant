@@ -1,0 +1,11 @@
+# Core dependencies for RAG-based research assistant
+
+
+
+numpy
+faiss-cpu
+sentence-transformers
+transformers
+torch
+pypdf
+groq

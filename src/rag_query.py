@@ -27,9 +27,6 @@ llm = pipeline(
 
 
 
-
-
-
 # ---------------- CONFIG ----------------
 
 EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
@@ -80,8 +77,9 @@ if __name__ == "__main__":
     
     
 
-    if HF_API_TOKEN is None:
-        raise ValueError("HF_API_TOKEN not set")
+    if USE_API_LLM and HF_API_TOKEN is None:
+        raise ValueError("HF_API_TOKEN not set for API LLM")
+
 
     # Load FAISS index
     index = load_index()
