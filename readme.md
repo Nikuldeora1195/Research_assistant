@@ -6,26 +6,50 @@ and generates grounded answers using a modular LLM backend (local by default, AP
 
 
 
+
+
+
+<img width="800" height="454" alt="Screenshot 2026-01-05 164025" src="https://github.com/user-attachments/assets/315f5b3b-82da-41bc-b0aa-d64c1c00a192" />
+
+
+
+
+
+
 ## Architecture Diagram
 
 The LLM interface allows swapping between local and API-based models without changing retrieval logic.
 
 
-Context Builder
-      |
-      v
-+-------------------+
-|   LLM Interface   |
-+-------------------+
-      |
-      v
-+---------------------------+
-| Local LLM  |  API LLM     |
-| (default)  | (optional)  |
-+---------------------------+
-      |
-      v
-Answer + Citations
+
+                ┌──────────────────────┐
+                │   Context Builder    │
+                │ (Retrieved Chunks)   │
+                └──────────┬───────────┘
+                           │
+                           ▼
+                ┌──────────────────────┐
+                │    LLM Interface     │
+                │  (Pluggable Layer)   │
+                └──────────┬───────────┘
+                           │
+              ┌────────────┴─────────────┐
+              │                          │
+              ▼                          ▼
+      
+         ┌─────────────────────┐   ┌────────────────────────────┐
+         │  Local LLM           │   │  LLaMA-3.1-8B-Instant API   │
+         │  (Default, Offline)  │   │  (Optional, Higher Quality) │
+         └──────────┬───────────┘   └──────────┬─────────────────┘
+                    │                          │
+              └────────────┬─────────────┘
+                           ▼
+                ┌──────────────────────┐
+                │  Answer + Citations  │
+                │   (Chunk IDs)        │
+                └──────────────────────┘
+
+
 
 
 ## Architecture Overview
@@ -122,6 +146,32 @@ Answer quality scales with the LLM backend, while retrieval correctness remains 
 
 
 
+## Folder structure
+
+
+  research_assistant/<br>
+  ├── data/<br>
+  │   └── papers/<br>
+  ├── src/<br>
+  │   ├── ingestion/<br>
+  │   │   └── pdfloader.py<br>
+  │   ├── retrieval/<br>
+  │   │   └── vector_store.py<br>
+  │   ├── llm/<br>
+  │   │   ├── base.py<br>
+  │   │   ├── local_llm.py<br>
+  │   │   └── llama_api.py<br>
+  │   └── rag_query.py<br>
+  ├── evaluation.md<br>
+  ├── requirements.txt<br>
+  ├── README.md<br>
+  ├── .gitignore<br>
+  └── venv/<br>
+
+
+
+
+
 
 ## Design Decisions
 
@@ -138,20 +188,20 @@ A local instruction-tuned model (FLAN-T5) is used as the default backend to ensu
 ## Installation & Usage
 
 # Setup
-git clone <repo-url>
-cd research_assistant
-python -m venv venv
-venv\Scripts\activate   # Windows
-pip install -r requirements.txt
+      git clone <repo-url>
+      cd research_assistant
+      python -m venv venv
+      venv\Scripts\activate   # Windows
+      pip install -r requirements.txt
 
 # Build Vector Index
-python -m src.retrieval.vector_store
+      python -m src.retrieval.vector_store
 
 # Run the Project
-python -m src.rag_query
+      python -m src.rag_query
 
 
--- Enter a research question to receive a grounded answer with citations--
+Enter a research question to receive a grounded answer with citations.
 
 ## LLM Backend Selection
 
@@ -163,12 +213,12 @@ Provides clearer explanations and better reasoning.
 
 # To enable API-based LLM:
 
-setx GROQ_API_KEY "your_api_key_here"
+      setx GROQ_API_KEY "your_api_key_here"
 
 
 Then set in src/rag_query.py:
 
-USE_API_LLM = True
+      USE_API_LLM = True
 
 
 ### Using Custom Documents
